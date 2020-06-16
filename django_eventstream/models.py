@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import IntegrityError, models, transaction
+from .utils import get_class_from_setting
 
 class EventCounter(models.Model):
 	name = models.CharField(max_length=255, unique=True)
@@ -55,3 +56,7 @@ class Event(models.Model):
 				counter.save()
 		else:
 			super(Event, self).save(*args, **kwargs)
+
+if get_class_from_setting('EVENTSTREAM_EVENT_MODEL'):
+	Event = type(get_class_from_setting('EVENTSTREAM_EVENT_MODEL'))
+

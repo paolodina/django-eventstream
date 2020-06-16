@@ -280,6 +280,13 @@ That's all you need to do. When storage is enabled, events are written to the da
 
 To enable storage selectively by channel, implement a channel manager and override `is_channel_reliable`.
 
+## Custom Event model
+It can be used a custom `Event` model declaring `EVENTSTREAM_EVENT_MODEL` variable in `settings.py`. For example:
+```py
+EVENTSTREAM_EVENT_MODEL = 'apps.eventstream.models.Event'
+```
+
+
 ## Receiving in the browser
 
 Include client libraries on the frontend:
