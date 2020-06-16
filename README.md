@@ -276,7 +276,7 @@ Then, set a storage class in `settings.py`:
 EVENTSTREAM_STORAGE_CLASS = 'django_eventstream.storage.DjangoModelStorage'
 ```
 
-That's all you need to do. When storage is enabled, events are written to the database before they are published, and they persist for 24 hours. If clients get disconnected, intermediate proxies go down, or your own server goes down or crashes at any time, even mid-publish, the stream will automatically be repaired.
+That's all you need to do. When storage is enabled, events are written to the database before they are published, and they persist for 24 hours. This interval can be changed in `settings.py` declaring the `EVENT_TIMEOUT` with a different value in minutes. If clients get disconnected, intermediate proxies go down, or your own server goes down or crashes at any time, even mid-publish, the stream will automatically be repaired.
 
 To enable storage selectively by channel, implement a channel manager and override `is_channel_reliable`.
 
