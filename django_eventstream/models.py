@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.contrib.postgres.fields import JSONField
 from django.db import IntegrityError, models, transaction
+
 
 class EventCounter(models.Model):
 	name = models.CharField(max_length=255, unique=True)
@@ -20,23 +22,25 @@ class EventCounter(models.Model):
 				en = cls.objects.get(name=name)
 		return en
 
+
 class Event(models.Model):
 	channel = models.CharField(max_length=255, db_index=True)
 	type = models.CharField(max_length=255, db_index=True)
-	data = models.TextField()
+	data = JSONField(blank=True, null=True)
 	eid = models.BigIntegerField(default=0, db_index=True)
 	created = models.DateTimeField(db_index=True, auto_now_add=True)
+	read_date = models.DateTimeField(db_index=True, default=None, blank=True, null=True)
+
 
 	class Meta:
-		unique_together = ('channel', 'eid')
+		unique_together = ("channel", "eid")
 
 	def save(self, *args, **kwargs):
 		if not self.eid:
 			counter = EventCounter.get_or_create(self.channel)
 
 			with transaction.atomic():
-				counter = EventCounter.objects.select_for_update(
-					).get(id=counter.id)
+				counter = EventCounter.objects.select_for_update().get(id=counter.id)
 
 				if counter.value == 0:
 					# insert placeholder to enable querying from ID 0

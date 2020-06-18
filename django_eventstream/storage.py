@@ -3,12 +3,15 @@ import json
 import datetime
 from django.utils import timezone
 from django.core.serializers.json import DjangoJSONEncoder
+from django.conf import settings
+
 from .event import Event
 
 is_python3 = sys.version_info >= (3,)
 
 # minutes before purging an event from the database
-EVENT_TIMEOUT = 60 * 24
+EVENT_TIMEOUT = getattr(settings, 'EVENT_TIMEOUT', None) or 60 * 24
+
 
 # attempt to trim this many events per pass
 EVENT_TRIM_BATCH = 50
