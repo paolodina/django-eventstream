@@ -79,7 +79,7 @@ def publish_event(channel, event_type, data, pub_id, pub_prev_id,
 		content_filters.append('build-id')
 	else:
 		event_id = None
-	data.update({'eid': pub_id})
+	#data.update({'eid': pub_id})
 	content = sse_encode_event(event_type, data, event_id=event_id, escape=bool(pub_id))
 	meta = {}
 	if skip_user_ids:
