@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.contrib.postgres.fields import JSONField
+from django.core.serializers.json import DjangoJSONEncoder
 from django.db import IntegrityError, models, transaction
 
 
@@ -26,7 +27,7 @@ class EventCounter(models.Model):
 class Event(models.Model):
 	channel = models.CharField(max_length=255, db_index=True)
 	type = models.CharField(max_length=255, db_index=True)
-	data = JSONField(blank=True, null=True)
+	data = JSONField(blank=True, null=True, encoder=DjangoJSONEncoder)
 	eid = models.BigIntegerField(default=0, db_index=True)
 	created = models.DateTimeField(db_index=True, auto_now_add=True)
 	read_date = models.DateTimeField(db_index=True, default=None, blank=True, null=True)
